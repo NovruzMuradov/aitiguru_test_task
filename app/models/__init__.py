@@ -4,4 +4,3 @@
 Импорт моделей здесь для удобства.
 """
 
-from .database import Base
