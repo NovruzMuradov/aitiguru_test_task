@@ -1,4 +1,3 @@
 """
-Inventory Order Service Application
+Главный пакет приложения.
 """
-__version__ = "1.0.0"
