@@ -1,3 +1,4 @@
+
 version: '3.8'
 
 services:
@@ -32,6 +33,8 @@ services:
         condition: service_healthy
     volumes:
       - .:/app
-
+    command: >
+      sh -c "pip install --no-cache-dir poetry && poetry install && uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload"
+      
 volumes:
   postgres_data:
