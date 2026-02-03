@@ -1,13 +1,13 @@
 """
-Конфигурация подключения к базе и создание базы моделей SQLAlchemy
+Модуль конфигурации проекта.
 """
 from sqlalchemy import create_engine, Column, Integer, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 
-DATABASE_URL = "postgresql://username:password@host:port/database_name"
+DATABASE_URL = "postgresql://username:password@localhost:5432/inventory_db"
 
-engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
@@ -32,6 +32,29 @@ class Item(Base):
     owner_id = Column(Integer, ForeignKey("users.id"))
 
     owner = relationship("User", back_populates="items")
+
+
+class Product(Base):
+    __tablename__ = "products"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, nullable=False, unique=True)
+    description = Column(String)
+    quantity = Column(Integer, default=0, nullable=False)
+    price = Column(Integer, nullable=False)
+
+    order_items = relationship("OrderItem", back_populates="product")
+
+
+class OrderItem(Base):
+    __tablename__ = "order_items"
+
+    id = Column(Integer, primary_key=True, index=True)
+    order_id = Column(Integer, ForeignKey("orders.id"), nullable=False)
+    product_id = Column(Integer, ForeignKey("products.id"), nullable=False)
+    quantity = Column(Integer, nullable=False)
+
+    product = relationship("Product", back_populates="order_items")
 
 
 def get_db():

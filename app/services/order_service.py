@@ -3,7 +3,8 @@
 """
 from sqlalchemy.orm import Session
 from app.models.database import Base
-from app.models import Product, OrderItem
+from app.models.database import Product, OrderItem
+
 
 def add_product_to_order(db: Session, order_id: int, product_id: int, quantity: int) -> bool:
     """
